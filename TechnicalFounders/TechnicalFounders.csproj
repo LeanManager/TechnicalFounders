@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.1" />
+    <PackageReference Include="Xam.Plugin.Connectivity" Version="3.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.1.1" />
+    <PackageReference Include="Xamarin.Forms" Version="3.1.0.637273" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images\" />
+    <Folder Include="Behaviors\" />
+    <Folder Include="CustomElements\" />
+    <Folder Include="Effects\" />
+    <Folder Include="Utilities\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Images\dallasbackground.jpg" />
+    <None Remove="Images\logoimage.png" />
+    <None Remove="Images\atomlogo.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Images\dallasbackground.jpg" />
+    <EmbeddedResource Include="Images\logoimage.png" />
+    <EmbeddedResource Include="Images\atomlogo.jpg" />
+  </ItemGroup>
+</Project>
