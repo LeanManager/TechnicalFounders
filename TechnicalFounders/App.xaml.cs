@@ -12,7 +12,7 @@ namespace TechnicalFounders
     public partial class App : Application
     {
         //TODO: Replace with *.azurewebsites.net url after deploying backend to Azure
-        public static string AzureBackendUrl = "http://localhost:5000";
+        public static string AzureBackendUrl = "*.azurewebsites.net";
         public static bool UseMockDataStore = false;
 
         public static Repo Repository;
@@ -22,7 +22,7 @@ namespace TechnicalFounders
         {
             InitializeComponent();
 
-            if (UseMockDataStore)
+            if (UseMockDataStore == true)
                 DependencyService.Register<MockDataStore>();
             else
                 DependencyService.Register<AzureDataStore>();

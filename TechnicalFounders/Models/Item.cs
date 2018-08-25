@@ -10,6 +10,12 @@ namespace TechnicalFounders.Models
 
         // int -> string in DB
         public ItemCategory Category { get; set; }
+
+        public override string ToString()
+        {
+            //return base.ToString();
+            return $"{Text} - {Description}";
+        }
     }
 
     public enum ItemCategory

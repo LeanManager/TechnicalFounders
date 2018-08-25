@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Plugin.Connectivity;
 using TechnicalFounders.Models;
+using Xamarin.Forms;
 
 namespace TechnicalFounders.Services
 {
@@ -49,11 +50,20 @@ namespace TechnicalFounders.Services
             if (item == null || !CrossConnectivity.Current.IsConnected)
                 return false;
 
-            var serializedItem = JsonConvert.SerializeObject(item);
+            try
+            {
+                var serializedItem = JsonConvert.SerializeObject(item);
 
-            var response = await client.PostAsync($"api/item", new StringContent(serializedItem, Encoding.UTF8, "application/json"));
+                var response = await client.PostAsync($"api/item", new StringContent(serializedItem, Encoding.UTF8, "application/json"));
 
-            return response.IsSuccessStatusCode;
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding item to cloud database: {ex.Message}");
+                await Application.Current.MainPage.DisplayAlert("Status", $"Error adding item to cloud database: {ex.Message}", "OK");
+                return false;
+            }
         }
 
         public async Task<bool> UpdateItemAsync(Item item)

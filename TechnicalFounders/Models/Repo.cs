@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TechnicalFounders.Services;
 using Xamarin.Forms;
@@ -11,6 +13,8 @@ namespace TechnicalFounders.Models
 {
     public class Repo : DbContext, IDataStore<Item>
     {
+        // Storing data locally using SQLite. Use AzureDataStore when storing data in SQL Server database.
+
         private string _dbPath;
 
         /// <summary>
@@ -21,8 +25,27 @@ namespace TechnicalFounders.Models
         {
             _dbPath = dbPath;
 
-            // Create database if it's not there. This will also ensure the data seeding will happen.
-            Database.EnsureCreated();
+            CheckTable();
+        }
+
+        private void CheckTable()
+        {
+            try
+            {
+                int rows = base.Database.ExecuteSqlCommand(@"SELECT * FROM Items");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+
+                RelationalDatabaseCreator databaseCreator = (RelationalDatabaseCreator)Database.GetService<IDatabaseCreator>();
+                databaseCreator.CreateTables();
+            }
+            finally
+            {
+                // Create database if it's not there. This will also ensure the data seeding will happen.
+                Database.EnsureCreated();
+            }
         }
 
         public DbSet<Item> Items { get; set; }
@@ -60,12 +83,12 @@ namespace TechnicalFounders.Models
 
             // Add some initial data.
 #if DEBUG
-            modelBuilder.Entity<Item>()
-                        .HasData(
-                            new Item { Id = Guid.NewGuid().ToString(), Text = "Private item", Description = "This is a private item description.", Category = ItemCategory.Private },
-                            new Item { Id = Guid.NewGuid().ToString(), Text = "Shopping item", Description = "This is a shopping item description.", Category = ItemCategory.Shopping },
-                            new Item { Id = Guid.NewGuid().ToString(), Text = "Work item", Description = "This is a work item description.", Category = ItemCategory.Work }
-                           );
+            //modelBuilder.Entity<Item>()
+                        //.HasData(
+                           // new Item { Id = Guid.NewGuid().ToString(), Text = "Private item", Description = "This is a private item description.", Category = ItemCategory.Private },
+                           // new Item { Id = Guid.NewGuid().ToString(), Text = "Shopping item", Description = "This is a shopping item description.", Category = ItemCategory.Shopping },
+                           // new Item { Id = Guid.NewGuid().ToString(), Text = "Work item", Description = "This is a work item description.", Category = ItemCategory.Work }
+                           //);
 #endif
         }
 
@@ -73,48 +96,85 @@ namespace TechnicalFounders.Models
 
         public async Task<Item> GetItemAsync(string id)
         {
-            var item = await Items.FirstOrDefaultAsync(x => x.Id == id).ConfigureAwait(false);
+            try
+            {
+                var item = await Items.FirstOrDefaultAsync(x => x.Id == id).ConfigureAwait(false);
 
-            return item;
+                return item;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return null;
+            }
         }
 
         public async Task<IEnumerable<Item>> GetItemsAsync(bool forceRefresh = false)
         {
-            // Careful if the list of items is too large because it will end up in memory.
-            var allItems = await Items.ToListAsync().ConfigureAwait(false);
+            try
+            {
+                // Careful if the list of items is too large because it will end up in memory.
+                var allItems = await Items.ToListAsync().ConfigureAwait(false);
 
-            return allItems;
+                return allItems;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return null;
+            }
         }
 
         public async Task<bool> AddItemAsync(Item item)
         {
-            await Items.AddAsync(item).ConfigureAwait(false);
-            await SaveChangesAsync().ConfigureAwait(false);
+            try
+            {
+                await Items.AddAsync(item).ConfigureAwait(false);
+                await SaveChangesAsync().ConfigureAwait(false);
 
-            // Error handling is still required.
-            return true;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return false;
+            }
         }
 
         public async Task<bool> UpdateItemAsync(Item item)
         {
-            Items.Update(item);
-            await SaveChangesAsync().ConfigureAwait(false);
+            try
+            {
+                Items.Update(item);
+                await SaveChangesAsync().ConfigureAwait(false);
 
-            // Error handling is still required.
-            return true;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return false;
+            }
         }
 
         public async Task<bool> DeleteItemAsync(string id)
         {
-            var itemToRemove = Items.FirstOrDefault(x => x.Id == id);
-            if (itemToRemove != null)
+            try
             {
-                Items.Remove(itemToRemove);
-                await SaveChangesAsync().ConfigureAwait(false);
-            }
+                var itemToRemove = Items.FirstOrDefault(x => x.Id == id);
+                if (itemToRemove != null)
+                {
+                    Items.Remove(itemToRemove);
+                    await SaveChangesAsync().ConfigureAwait(false);
+                }
 
-            // Error handling is still required.
-            return true;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                return false;
+            }
         }
         #endregion
     }

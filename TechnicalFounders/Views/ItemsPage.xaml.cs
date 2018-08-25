@@ -49,5 +49,12 @@ namespace TechnicalFounders.Views
             if (viewModel.Items.Count == 0)
                 viewModel.LoadItemsCommand.Execute(null);
         }
+
+        void OnDeleteClicked(object sender, System.EventArgs e)
+        {
+            var item = ((MenuItem)sender).CommandParameter as Item;
+
+            MessagingCenter.Send(this, "RemoveItem", item);
+        }
     }
 }

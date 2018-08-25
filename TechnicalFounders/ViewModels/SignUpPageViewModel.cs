@@ -40,7 +40,7 @@ namespace TechnicalFounders.ViewModels
             var user = new User
             {
                 Id = Guid.NewGuid().ToString(),
-                EmailAddress = EmailAddress,
+                EmailAddress = EmailAddress.ToLower(),
                 Password = Password,
                 UserName = UserName
             };

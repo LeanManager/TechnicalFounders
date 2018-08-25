@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              x:Class="TechnicalFounders.Views.NewItemPage" 
-             Title="New Item">
+             Title="New Goal">
     
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Save" Clicked="Save_Clicked" />
@@ -14,11 +14,12 @@
             
             <Label Text="Text" FontSize="Medium" />
             
-            <Entry Text="{Binding Item.Text}" FontSize="Small" />
+            <Entry Text="{Binding Item.Text, Mode=OneWayToSource}" FontSize="Small" 
+                   Placeholder="{Binding Item.Text, Mode=OneWay}"/>
             
             <Label Text="Description" FontSize="Medium" />
             
-            <Editor Text="{Binding Item.Description}" FontSize="Small" Margin="0" />
+            <Editor Text="{Binding Item.Description, Mode=TwoWay}" FontSize="Small" Margin="0"/>
             
         </StackLayout>
         

@@ -114,7 +114,7 @@
 
     <ScrollView VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never">
 
-        <Grid Margin="20, 45, 20, 50" RowSpacing="0">
+        <Grid x:Name="signUpGrid" Margin="20, 25, 20, 50" RowSpacing="0">
             
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -124,7 +124,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="60" />
                 <RowDefinition Height="60" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="40" />
                 <RowDefinition Height="40" />
                 <RowDefinition Height="40" />
                 <RowDefinition Height="40" />
@@ -141,10 +141,6 @@
                    Margin="0, 0, 0, 20" VerticalTextAlignment="End"
                    Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" />
 
-            <Button Text="X" FontAttributes="Bold" TextColor="DarkRed" FontSize="Large" Margin="0, 0, 0, 0"
-                    BackgroundColor="White" HorizontalOptions="End" Command="{Binding GoBackCommand, Mode=TwoWay}"
-                    Grid.Column="1" Grid.Row="0"/>
-
             <Label Text="Create your account" FontAttributes="Bold" FontSize="Large"
                    HeightRequest="90" Margin="0, 10, 0, 20" VerticalTextAlignment="Start"
                    Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" />
@@ -153,7 +149,7 @@
                    VerticalTextAlignment="Center"
                    Grid.Column="0" Grid.Row="2" />
 
-            <Label Text="All fields are mandatory" FontSize="Small" TextColor="Silver"
+            <Label Text="All fields are mandatory." FontSize="Small" TextColor="Silver"
                    VerticalTextAlignment="Center"
                    Grid.Column="1" Grid.Row="2" />
 
@@ -185,7 +181,7 @@
                    VerticalTextAlignment="Center"
                    Grid.Column="0" Grid.Row="8" />
 
-            <Label Text="Six or more characters" FontSize="Small" TextColor="Silver"
+            <Label Text="Six or more characters." FontSize="Small" TextColor="Silver"
                    VerticalTextAlignment="Center"
                    Grid.Column="1" Grid.Row="8" />
 

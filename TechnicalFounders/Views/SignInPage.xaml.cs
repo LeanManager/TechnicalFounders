@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using TechnicalFounders.CustomElements;
 using TechnicalFounders.Effects;
 using TechnicalFounders.ViewModels;
 using Xamarin.Forms;
@@ -13,7 +14,7 @@ namespace TechnicalFounders.Views
         Image backgroundImage;
         ScrollView scrollView;
         Grid grid;
-        Image logoImage;
+        Label titleLabel;
         Entry emailAddressEntry;
         Entry passwordEntry;
         Button signInButton;
@@ -40,14 +41,14 @@ namespace TechnicalFounders.Views
             {
                 RowDefinitions = new RowDefinitionCollection
                 {
-                    new RowDefinition { Height = 100 },
-                    new RowDefinition { Height = 110 },
-                    new RowDefinition { Height = 40 },
+                    new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) },
                     new RowDefinition { Height = 50 },
-                    new RowDefinition { Height = new GridLength (1, GridUnitType.Auto) },
-                    new RowDefinition { Height = new GridLength (1, GridUnitType.Star) },
-                    new RowDefinition { Height = new GridLength (1, GridUnitType.Auto) },
-                    new RowDefinition { Height = new GridLength (1, GridUnitType.Auto) }
+                    new RowDefinition { Height = 50 },
+                    new RowDefinition { Height = 60 },
+                    new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) },
+                    new RowDefinition { Height = new GridLength(1, GridUnitType.Star) },
+                    new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) },
+                    new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) }
                 },
                 Margin = new Thickness(40, 35, 40, 30),
                 RowSpacing = 20
@@ -60,32 +61,40 @@ namespace TechnicalFounders.Views
             {
                 Source = ImageSource.FromResource("TechnicalFounders.Images.dallasbackground.jpg", 
                                                   typeof(SignInPage).GetTypeInfo().Assembly),
-                Aspect = Aspect.AspectFill
+                Aspect = Aspect.AspectFill,
+                Opacity = 0.8
             };
 
-            logoImage = new Image
+            titleLabel = new Label
             {
-                Source = ImageSource.FromResource("TechnicalFounders.Images.atomlogo.jpg",
-                                                  typeof(SignInPage).GetTypeInfo().Assembly),
-                Aspect = Aspect.AspectFit,
-                HorizontalOptions = LayoutOptions.Center
+                BackgroundColor = Color.Transparent,
+                Text = "Technical Founders",
+                FontSize = 50,
+                TextColor = Color.White,
+                HorizontalTextAlignment = TextAlignment.Center,
+                HeightRequest = 100,
+                Margin = new Thickness(0, 30, 0, 0),
+                FontFamily = Device.RuntimePlatform == Device.iOS ? "Rancho-Regular" : "Rancho-Regular.ttf#Rancho-Regular"
             };
 
             // Also add corresponding image to the left
-            emailAddressEntry = new Entry
+            emailAddressEntry = new CustomEntry
             {
                 Placeholder = "Email Address",
-                Margin = new Thickness(0, 70, 0, 0)
+                HeightRequest = 50
             };
             emailAddressEntry.SetBinding(Entry.TextProperty, "EmailAddress");
+            emailAddressEntry.Effects.Add(new CaseTextEffect());
 
             // Also add corresponding image to the left
-            passwordEntry = new Entry
+            passwordEntry = new CustomEntry
             {
                 Placeholder = "Password",
-                IsPassword = true
+                IsPassword = true,
+                HeightRequest = 50
             };
             passwordEntry.SetBinding(Entry.TextProperty, "Password");
+            passwordEntry.Effects.Add(new CaseTextEffect());
 
             signInButton = new Button
             {
@@ -94,17 +103,20 @@ namespace TechnicalFounders.Views
                 TextColor = Color.White,
                 FontSize = 18,
                 FontAttributes = FontAttributes.Bold,
-                BackgroundColor = Color.IndianRed,
+                BackgroundColor = Color.FromHex("#b40000"),
                 HorizontalOptions = LayoutOptions.Fill,
-                Margin = new Thickness(40, 0, 40, 0)
+                Margin = new Thickness(40, 10, 40, 0)
             };
             signInButton.SetBinding(Button.CommandProperty, "SignInCommand");
+            signInButton.Effects.Add(new CaseTextEffect());
 
             forgotPasswordButton = new Button
             {
                 Text = "Forgot password?",
                 Style = Resources["smallButtonStyle"] as Style
             };
+            forgotPasswordButton.SetBinding(Button.CommandProperty, "ForgotPasswordCommand");
+            forgotPasswordButton.Effects.Add(new CaseTextEffect());
 
             separator = new BoxView
             {
@@ -121,11 +133,12 @@ namespace TechnicalFounders.Views
                 Style = Resources["smallButtonStyle"] as Style
             };
             signUpButton.SetBinding(Button.CommandProperty, "NavigateToSignUpCommand");
+            signUpButton.Effects.Add(new CaseTextEffect());
         }
 
         private void AddViewsToGrid()
         {
-            grid.Children.Add(logoImage, 0, 0);
+            grid.Children.Add(titleLabel, 0, 0);
             grid.Children.Add(emailAddressEntry, 0, 1);
             grid.Children.Add(passwordEntry, 0, 2);
             grid.Children.Add(signInButton, 0, 3);

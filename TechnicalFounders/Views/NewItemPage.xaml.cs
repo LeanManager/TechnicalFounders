@@ -19,8 +19,8 @@ namespace TechnicalFounders.Views
 
             Item = new Item
             {
-                Text = "Item name",
-                Description = "This is an item description."
+                Text = "Goal title",
+                Description = "Enter goal description."
             };
 
             BindingContext = this;

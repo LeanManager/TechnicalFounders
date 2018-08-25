@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-
+using TechnicalFounders.MobileAppService.Models;
 using TechnicalFounders.Models;
 
 namespace TechnicalFounders.Controllers
@@ -8,12 +9,13 @@ namespace TechnicalFounders.Controllers
     [Route("api/[controller]")]
     public class ItemController : Controller
     {
-
+        private readonly ItemContext _context;
         private readonly IItemRepository ItemRepository;
 
-        public ItemController(IItemRepository itemRepository)
+        public ItemController(IItemRepository itemRepository, ItemContext itemContext)
         {
             ItemRepository = itemRepository;
+            _context = itemContext;
         }
 
         [HttpGet]
@@ -30,7 +32,7 @@ namespace TechnicalFounders.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody]Item item)
+        public async Task<IActionResult> Create([FromBody]Item item)
         {
             try
             {
@@ -40,6 +42,9 @@ namespace TechnicalFounders.Controllers
                 }
 
                 ItemRepository.Add(item);
+
+                _context.Add(item);
+                await _context.SaveChangesAsync();
 
             }
             catch (Exception)

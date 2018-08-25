@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ViewCell xmlns="http://xamarin.com/schemas/2014/forms" 
+          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+          xmlns:util="clr-namespace:TechnicalFounders.Utilities;assembly=TechnicalFounders"
+          xmlns:custom="clr-namespace:TechnicalFounders.CustomElements;assembly=TechnicalFounders"
+          x:Class="TechnicalFounders.CustomCells.IncomingViewCell">
+    
+    <Grid ColumnSpacing="2" Padding="5">
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="40"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="40"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <custom:CircleImage Grid.Row="0"
+                            Grid.Column="0"
+                            HeightRequest="35"
+                            WidthRequest="35"
+                            BorderWidth="2"
+                            BorderColor="#03A9F4"
+                            Aspect="AspectFill"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center" 
+                            Source="{util:ImageResource Source=TechnicalFounders.Images.atomlogo.jpg}" />
+            
+        <Frame Grid.Row="0" OutlineColor="Transparent" HasShadow="false" Grid.Column="1" BackgroundColor="#03A9F4"
+               HorizontalOptions="Start" CornerRadius="10" Margin="0,0,30,0">
+            <Label TextColor="White" Text="{Binding Text}" HorizontalOptions="Start" HorizontalTextAlignment="Start"
+                   x:Name="textLabel"/>
+        </Frame>
+        
+        <Label FontSize="Micro" Grid.Row="1" Grid.Column="1" 
+               Text="{Binding MessageDateTime, StringFormat='{0:MM/dd/yyyy hh:mm tt}'}" TextColor="Gray"/>
+        
+    </Grid>
+    
+</ViewCell>

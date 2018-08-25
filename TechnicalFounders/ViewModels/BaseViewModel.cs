@@ -12,9 +12,8 @@ namespace TechnicalFounders.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        public IDataStore<Item> DataStore => App.Repository;
-
-        //public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>() ?? new MockDataStore();
+        public IDataStore<Item> LocalDataStore => App.Repository;
+        public IDataStore<Item> CloudDataStore => DependencyService.Get<IDataStore<Item>>() ?? new AzureDataStore();
 
         bool isBusy = false;
         public bool IsBusy
@@ -30,9 +29,7 @@ namespace TechnicalFounders.ViewModels
             set { SetProperty(ref title, value); }
         }
 
-        protected bool SetProperty<T>(ref T backingStore, T value,
-            [CallerMemberName]string propertyName = "",
-            Action onChanged = null)
+        protected bool SetProperty<T>(ref T backingStore, T value, [CallerMemberName]string propertyName = "", Action onChanged = null)
         {
             if (EqualityComparer<T>.Default.Equals(backingStore, value))
                 return false;

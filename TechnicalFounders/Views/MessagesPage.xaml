@@ -1,9 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:util="clr-namespace:TechnicalFounders.Utilities;assembly=TechnicalFounders"
              x:Class="TechnicalFounders.Views.MessagesPage">
     
-    <ContentPage.Content>
-    </ContentPage.Content>
+    <ContentPage.Resources>
+        
+        <ResourceDictionary>
+          <util:MyDataTemplateSelector x:Key="MessageTemplateSelector"/>
+        </ResourceDictionary>
+        
+    </ContentPage.Resources>
+
+    <AbsoluteLayout>
+        
+        <ListView x:Name="MessagesListView" 
+                  ItemTemplate="{StaticResource MessageTemplateSelector}" 
+                  ItemsSource="{Binding Messages}"
+                  CachingStrategy="RecycleElement"
+                  HasUnevenRows="true" 
+                  ItemSelected="MyListView_OnItemSelected"
+                  ItemTapped="MyListView_OnItemTapped"
+                  SeparatorVisibility="None"
+                  AbsoluteLayout.LayoutBounds="0,0,1,0.85"
+                  AbsoluteLayout.LayoutFlags="All" />
+        
+        <Grid x:Name="MessageControls" RowSpacing="1" ColumnSpacing="2" Padding="5"
+              BackgroundColor="#EFEFF4"
+              VerticalOptions="FillAndExpand"
+              HorizontalOptions="FillAndExpand"
+              AbsoluteLayout.LayoutBounds="0,1,1,0.1"
+              AbsoluteLayout.LayoutFlags="All">
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <Entry Grid.Column="0" HeightRequest="25" Placeholder="Message" Text="{Binding OutgoingText}"/>
+            
+            <Button Grid.Column="1" Text="Send" Command="{Binding SendCommand}">
+                <Button.WidthRequest>
+                    <OnPlatform x:TypeArguments="x:Double">
+                        <On Platform="iOS" Value="50"/>
+                        <On Platform="Android" Value="80"/>
+                    </OnPlatform>
+                </Button.WidthRequest>
+            </Button>
+            
+        </Grid>
+
+    </AbsoluteLayout>
     
 </ContentPage>

@@ -6,6 +6,7 @@ using System.Linq;
 using Foundation;
 using UIKit;
 
+[assembly: Preserve(typeof(System.Linq.Queryable), AllMembers = true)]
 namespace TechnicalFounders.iOS
 {
     // The UIApplicationDelegate for the application. This class is responsible for launching the 

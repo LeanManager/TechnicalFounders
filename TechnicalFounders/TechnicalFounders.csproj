@@ -16,15 +16,29 @@
     <Folder Include="CustomElements\" />
     <Folder Include="Effects\" />
     <Folder Include="Utilities\" />
+    <Folder Include="CustomCells\" />
+    <Folder Include="Interfaces\" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="Images\dallasbackground.jpg" />
     <None Remove="Images\logoimage.png" />
     <None Remove="Images\atomlogo.jpg" />
+    <None Remove="Images\baboon.jpg" />
+    <None Remove="Images\squirrel.jpg" />
+    <None Remove="Images\newatom.jpg" />
+    <None Remove="Images\handslogo.png" />
+    <None Remove="Images\newatom.png" />
+    <None Remove="Images\quantum.jpg" />
+    <None Remove="Images\deniseatom.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Images\dallasbackground.jpg" />
-    <EmbeddedResource Include="Images\logoimage.png" />
     <EmbeddedResource Include="Images\atomlogo.jpg" />
+    <EmbeddedResource Include="Images\baboon.jpg" />
+    <EmbeddedResource Include="Images\squirrel.jpg" />
+    <EmbeddedResource Include="Images\handslogo.png" />
+    <EmbeddedResource Include="Images\newatom.png" />
+    <EmbeddedResource Include="Images\quantum.jpg" />
+    <EmbeddedResource Include="Images\deniseatom.png" />
   </ItemGroup>
 </Project>

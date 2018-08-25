@@ -6,8 +6,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.EntityFrameworkCore;
 
 using TechnicalFounders.Models;
+using TechnicalFounders.MobileAppService.Models;
 
 namespace TechnicalFounders.MobileAppService
 {
@@ -31,6 +33,11 @@ namespace TechnicalFounders.MobileAppService
         {
             services.AddMvc();
             services.AddSingleton<IItemRepository, ItemRepository>();
+
+            string databaseString = Configuration.GetSection("Data").GetSection("ConnectionString").Value;
+            string connection = @databaseString;
+
+            services.AddDbContext<ItemContext>(options => options.UseSqlServer(connection));
 
             services.AddSwaggerGen(c =>
             {

@@ -14,18 +14,12 @@ namespace TechnicalFounders.ViewModels
         {
             SignInCommand = new Command(SignIn, CanExecute);
             NavigateToSignUpCommand = new Command(NavigateToSignUpPage, CanExecute);
-        }
-
-        private bool CanExecute()
-        {
-            if (IsBusy == true)
-                return false;
-            
-            return true;
+            ForgotPasswordCommand = new Command(ForgotPasswordAction, CanExecute);
         }
 
         public ICommand SignInCommand { private set; get; }
         public ICommand NavigateToSignUpCommand { private set; get; }
+        public ICommand ForgotPasswordCommand { private set; get; }
 
         private async void SignIn()
         {
@@ -90,10 +84,42 @@ namespace TechnicalFounders.ViewModels
             await Application.Current.MainPage.Navigation.PushModalAsync(new SignUpPage());
         }
 
+        private async void ForgotPasswordAction()
+        {
+            IsBusy = true;
+            RaiseCanExecutes();
+
+            try
+            {
+                // Entry DisplayAlert asking for email address,
+                // Validation, etc...
+
+                await Application.Current.MainPage.DisplayAlert("Coming soon!", "Feature pending implementation.", "OK");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+            finally
+            {
+                IsBusy = false;
+                RaiseCanExecutes();
+            }
+        }
+
+        private bool CanExecute()
+        {
+            if (IsBusy == true)
+                return false;
+
+            return true;
+        }
+
         private void RaiseCanExecutes()
         {
             ((Command)SignInCommand).ChangeCanExecute();
             ((Command)NavigateToSignUpCommand).ChangeCanExecute();
+            ((Command)ForgotPasswordCommand).ChangeCanExecute();
         }
 
         private string emailAddress;

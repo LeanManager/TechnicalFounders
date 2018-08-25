@@ -12,6 +12,20 @@ namespace TechnicalFounders.Views
             InitializeComponent();
 
             BindingContext = new SignUpPageViewModel();
+
+            if (Device.RuntimePlatform == Device.iOS)
+            {
+                var closeButton = new Button
+                {
+                    Text = "X",
+                    FontAttributes = FontAttributes.Bold,
+                    TextColor = Color.DarkRed,
+                    FontSize = 22,
+                    HorizontalOptions = LayoutOptions.End
+                };
+                closeButton.SetBinding(Button.CommandProperty, "GoBackCommand", BindingMode.TwoWay);
+                signUpGrid.Children.Add(closeButton, 1, 0);
+            }
         }
 
         bool IsValid()
