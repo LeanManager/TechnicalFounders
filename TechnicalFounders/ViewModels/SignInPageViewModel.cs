@@ -10,11 +10,15 @@ namespace TechnicalFounders.ViewModels
 {
     public class SignInPageViewModel : BaseViewModel
     {
+        public AccountManager accountManager;
+
         public SignInPageViewModel()
         {
             SignInCommand = new Command(SignIn, CanExecute);
             NavigateToSignUpCommand = new Command(NavigateToSignUpPage, CanExecute);
             ForgotPasswordCommand = new Command(ForgotPasswordAction, CanExecute);
+
+            accountManager = new AccountManager();
         }
 
         public ICommand SignInCommand { private set; get; }
@@ -44,30 +48,13 @@ namespace TechnicalFounders.ViewModels
 
         private async Task ValidateLoginCredentials()
         {
-            if (String.IsNullOrEmpty(EmailAddress) || String.IsNullOrEmpty(Password))
-            {
-                await Application.Current.MainPage.DisplayAlert("Error", "Please provide the required login information.", "OK");
-                return;
-            }
+            // TODO: SQL Server user information lookup (optional; requires network connectivity).
 
-            // Check SQLite database first (secured local data) only (for now - fast portfolio reasons)
-            // LATER - If not found, check SQL Server (check for network connectivity)
-            // SignInPage is only relevant once this is in place.
+            // Xamarin.Auth is more persistent than SQLite.
+            // EmailAddress is Xamarin.Auth account "username"
+            bool success = accountManager.LoginToAccount(EmailAddress.ToLower(), Password);
 
-            await LookUpUserInDatabase();
-        }
-
-        private async Task LookUpUserInDatabase()
-        {
-            User user = await App.UserInformation.GetUserAsync();
-
-            if (user == null || user.EmailAddress.Length <= 1 || user.Password.Length <= 1
-                || string.IsNullOrEmpty(user.EmailAddress) || string.IsNullOrEmpty(user.Password))
-            {
-                await Application.Current.MainPage.DisplayAlert("Credentials not found", "Please sign up before signing in.", "OK");
-                return;
-            }
-            if (EmailAddress.ToLower() == user.EmailAddress.ToLower() && Password.ToLower() == user.Password.ToLower())
+            if (success == true)
             {
                 await Application.Current.MainPage.Navigation.PushModalAsync(new MainPage());
 
@@ -75,7 +62,7 @@ namespace TechnicalFounders.ViewModels
             }
             else
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "Please provide your correct email address and password.", "OK");
+                await Application.Current.MainPage.DisplayAlert("Error", "Unable to sign in. Please check your email address and password.", "OK");
             }
         }
 

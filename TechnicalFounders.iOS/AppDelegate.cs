@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
+using CarouselView.FormsPlugin.iOS;
 using Foundation;
+using Lottie.Forms.iOS.Renderers;
 using UIKit;
 
 [assembly: Preserve(typeof(System.Linq.Queryable), AllMembers = true)]
@@ -28,6 +29,10 @@ namespace TechnicalFounders.iOS
             SQLitePCL.Batteries_V2.Init();
 
             global::Xamarin.Forms.Forms.Init();
+
+            AnimationViewRenderer.Init();
+
+            CarouselViewRenderer.Init();
 
             // Enforced by Apple
 

@@ -6,8 +6,7 @@
              BackgroundColor="White">
 
     <ContentPage.Resources>
-
-        <!-- If a Style does not have an x:Key, it is applied to all TargetType instances -->
+        
         <Style TargetType="Entry">
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
@@ -24,7 +23,7 @@
                         <VisualState x:Name="Disabled"/>
                         
                     </VisualStateGroup>
-
+                    
                     <VisualStateGroup x:Name="ValidationStates">
                         
                         <VisualState x:Name="Valid">
@@ -44,7 +43,7 @@
                 </VisualStateGroupList>
             </Setter>
         </Style>
-
+        
         <Style x:Key="ValidationMessageStyle" TargetType="Label">
             <Setter Property="FontSize" Value="Micro"/>
             <Setter Property="FontAttributes" Value="Italic"/>
@@ -75,7 +74,7 @@
                 </VisualStateGroupList>
             </Setter>
         </Style>
-
+        
         <Style x:Key="PasswordStrengthStyle" BasedOn="{StaticResource ValidationMessageStyle}" TargetType="Label">
             <Setter Property="VisualStateManager.VisualStateGroups">
                 <VisualStateGroupList>
@@ -156,10 +155,6 @@
             <Entry Placeholder="Enter a user name" x:Name="userNameEntry" TextChanged="UserName_TextChanged"
                    Text="{Binding UserName, Mode=OneWayToSource}"
                    Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="2"/>
-            <!--<Entry.Behaviors>
-                    <behaviors:EntryValidationBehavior Command="{Binding EntryCommand}" />
-                </Entry.Behaviors>
-            </Entry>-->
 
             <Label x:Name="userNameValidationLabel" IsVisible="false" Text="You must enter a user name."
                    Style="{StaticResource ValidationMessageStyle}"

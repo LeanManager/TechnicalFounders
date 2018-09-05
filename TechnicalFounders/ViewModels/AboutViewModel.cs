@@ -1,16 +1,22 @@
 ﻿using System;
 using System.Windows.Input;
 using TechnicalFounders.Models;
+using TechnicalFounders.Utilities;
 using TechnicalFounders.Views;
+using Xamarin.Auth;
 using Xamarin.Forms;
 
 namespace TechnicalFounders.ViewModels
 {
     public class AboutViewModel : BaseViewModel
     {
+        AccountManager accountManager;
+
         public AboutViewModel()
         {
             Title = "About";
+
+            accountManager = new AccountManager();
 
             OpenWebCommand = new Command(() => Device.OpenUri(new Uri("https://xamarin.com/platform")));
 
@@ -22,30 +28,35 @@ namespace TechnicalFounders.ViewModels
                     Application.Current.MainPage = new SignInPage();
             });
 
+            AnimationsCommand = new Command(async () =>
+            {
+                await Application.Current.MainPage.Navigation.PushModalAsync(new AnimationsPage());
+            });
+
             GetUserInformation();
         }
 
-        private async void GetUserInformation()
+        private void GetUserInformation()
         {
-            User user = await App.UserInformation.GetUserAsync();
+            Account account = accountManager.CheckForAccount();
 
-            if (user == null || user.EmailAddress.Length <= 1 || user.Password.Length <= 1
-                || string.IsNullOrEmpty(user.EmailAddress) || string.IsNullOrEmpty(user.Password))
+            if (account != null)
             {
-                UserName = "User name not found";
-                EmailAddress = "Email address not found";
-                Password = "Password not found";
+                UserName = $"{account.Properties["username"]}";
+                EmailAddress = account.Username;
+                Password = $"{account.Properties["password"]} (cryptographic encryption)";
             }
             else
             {
-                UserName = user.UserName;
-                EmailAddress = user.EmailAddress;
-                Password = $"{user.Password} (cryptographic encryption required)";
+                UserName = "Cannot be found.";
+                EmailAddress = "Cannot be found.";
+                Password = "Cannot be found.";
             }
         }
 
         public ICommand OpenWebCommand { get; }
         public ICommand SignOutCommand { get; }
+        public ICommand AnimationsCommand { get; }
 
         private string userName;
         public string UserName

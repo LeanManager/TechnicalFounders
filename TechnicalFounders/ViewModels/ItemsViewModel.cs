@@ -8,17 +8,23 @@ using Xamarin.Forms;
 using TechnicalFounders.Models;
 using TechnicalFounders.Views;
 using System.Windows.Input;
+using TechnicalFounders.Utilities;
+using Xamarin.Auth;
 
 namespace TechnicalFounders.ViewModels
 {
     public class ItemsViewModel : BaseViewModel
     {
+        public AccountManager accountManager;
+
         public ObservableCollection<Item> Items { get; set; }
         public ICommand LoadItemsCommand { get; set; }
 
         public ItemsViewModel()
         {
             Title = "Home";
+
+            accountManager = new AccountManager();
 
             Items = new ObservableCollection<Item>();
 
@@ -38,10 +44,18 @@ namespace TechnicalFounders.ViewModels
             MessagingCenter.Subscribe<NewItemPage, Item>(this, "AddItem", async (obj, item) =>
             {
                 var _item = item as Item;
-                Items.Add(_item);
-                await LocalDataStore.AddItemAsync(_item);
-                // Response code handling
-                await CloudDataStore.AddItemAsync(_item);
+
+                // Encrypt
+                _item.CipherText = GetCipherText(_item.Description);
+
+                if (_item.CipherText != null)
+                {
+                    Items.Add(_item);
+
+                    await LocalDataStore.AddItemAsync(_item);
+                    // Response code handling
+                    //await CloudDataStore.AddItemAsync(_item);
+                }
             });
         }
 
@@ -69,6 +83,32 @@ namespace TechnicalFounders.ViewModels
             {
                 IsBusy = false;
             }
+        }
+
+        // Decryption of goal description - coming from SQLite database
+        string GetGoalText(byte[] cipherText)
+        {
+            Account account = accountManager.CheckForAccount();
+
+            if (!account.Properties.TryGetValue("keymaterial", out string keyString))
+                return String.Empty;
+
+            byte[] keyMaterial = Convert.FromBase64String(keyString);
+
+            return CryptoUtilities.ByteArrayToString(CryptoUtilities.Decrypt(cipherText, keyMaterial));
+        }
+
+        // Encryption of goal description
+        byte[] GetCipherText(string diaryText)
+        {
+            Account account = accountManager.CheckForAccount();
+
+            if (!account.Properties.TryGetValue("keymaterial", out string keyString))
+                return null;
+
+            byte[] keyMaterial = Convert.FromBase64String(keyString);
+
+            return CryptoUtilities.Encrypt(CryptoUtilities.StringToByteArray(diaryText), keyMaterial);
         }
     }
 }

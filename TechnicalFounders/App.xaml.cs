@@ -5,18 +5,23 @@ using TechnicalFounders.Views;
 using Xamarin.Forms.Xaml;
 using TechnicalFounders.Models;
 using System.Diagnostics;
+using Xamarin.Auth;
+using TechnicalFounders.Utilities;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace TechnicalFounders
 {
     public partial class App : Application
     {
-        //TODO: Replace with *.azurewebsites.net url after deploying backend to Azure
         public static string AzureBackendUrl = "https://*.azurewebsites.net";
         public static bool UseMockDataStore = false;
 
         public static Repo Repository;
         public static UserInfo UserInformation;
+
+        AccountManager accountManager = new AccountManager();
+
+        public bool IsLoggedIn { get; set; } = false;
 
         public App(string dbPath)
         {
@@ -33,23 +38,15 @@ namespace TechnicalFounders
             Repository = new Repo(dbPath);
             UserInformation = new UserInfo(dbPath);
 
-            CheckLocalDatabaseForUserInformation();
+            CheckStoreForUserInformation();
         }
 
         // Warning: Doing more than one thing - fix
-        private async void CheckLocalDatabaseForUserInformation()
+        private void CheckStoreForUserInformation()
         {
-            User user = await App.UserInformation.GetUserAsync();
+            Account account = accountManager.CheckForAccount();
 
-            if (user == null || user.EmailAddress.Length <= 1 || user.Password.Length <= 1 
-                || string.IsNullOrEmpty(user.EmailAddress) || string.IsNullOrEmpty(user.Password))
-            {
-                IsLoggedIn = false;
-            }
-            else
-            {
-                IsLoggedIn = true;
-            }
+            IsLoggedIn = account != null && !string.IsNullOrEmpty(account.Username);
 
             SetMainPage();
         }
@@ -60,13 +57,6 @@ namespace TechnicalFounders
                 MainPage = new MainPage();
             else
                 MainPage = new SignInPage();
-        }
-
-        private bool isLoggedIn = false;
-        public bool IsLoggedIn
-        {
-            get => isLoggedIn;
-            set => isLoggedIn = value;
         }
 
         protected override void OnStart()

@@ -5,6 +5,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 using TechnicalFounders.Models;
+using TechnicalFounders.Utilities;
 
 namespace TechnicalFounders.Views
 {

@@ -53,14 +53,14 @@ namespace TechnicalFounders.Models
                         .HasKey(p => p.Id);
 
             // Require email to be set.
-            modelBuilder.Entity<User>()
-                        .Property(p => p.EmailAddress)
-                        .IsRequired();
+            //modelBuilder.Entity<User>()
+                        //.Property(p => p.EmailAddress)
+                        //.IsRequired();
 
             // Require password to be set.
-            modelBuilder.Entity<User>()
-                        .Property(p => p.Password)
-                        .IsRequired();
+            //modelBuilder.Entity<User>()
+                        //.Property(p => p.Password)
+                        //.IsRequired();
 
             modelBuilder.Entity<User>()
                         .Property(p => p.UserName);

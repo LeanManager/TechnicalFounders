@@ -10,13 +10,17 @@ namespace TechnicalFounders.ViewModels
 {
     public class SignUpPageViewModel : BaseViewModel
     {
+        private AccountManager accountManager;
+
         public SignUpPageViewModel()
         {
-            CreateAccountCommand = new Command<bool>(CreateAccount);
-            GoBackCommand = new Command(GoBack);
+            CreateAccountCommand = new Command<bool>(async (canCreate) => await CreateAccount(canCreate));
+            GoBackCommand = new Command(async () => await Application.Current.MainPage.Navigation.PopModalAsync());
+
+            accountManager = new AccountManager();
         }
 
-        private async void CreateAccount(bool canCreate)
+        private async Task CreateAccount(bool canCreate)
         {
             if (canCreate == true)
             {
@@ -37,15 +41,8 @@ namespace TechnicalFounders.ViewModels
 
         private async Task ProcessRegistration()
         {
-            var user = new User
-            {
-                Id = Guid.NewGuid().ToString(),
-                EmailAddress = EmailAddress.ToLower(),
-                Password = Password,
-                UserName = UserName
-            };
-
-            bool succeeded = await App.UserInformation.AddUserAsync(user);
+            // EmailAddress is Xamarin.Auth account "Username"
+            bool succeeded = accountManager.CreateAndSaveAccount(EmailAddress.ToLower(), Password, UserName, Guid.NewGuid().ToString());
 
             if (succeeded == true)
             {
@@ -57,13 +54,8 @@ namespace TechnicalFounders.ViewModels
             }
             else
             {
-                await Application.Current.MainPage.DisplayAlert("Error", "An error occurred while creating your account. Please try again.", "OK");
+                await Application.Current.MainPage.DisplayAlert("Error", "An account already exists for this email address.", "OK");
             }
-        }
-
-        private async void GoBack()
-        {
-            await Application.Current.MainPage.Navigation.PopModalAsync();
         }
 
         public ICommand CreateAccountCommand { private set; get; }

@@ -7,6 +7,8 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using CarouselView.FormsPlugin.Android;
+using Lottie.Forms.Droid;
 
 namespace TechnicalFounders.Droid
 {
@@ -21,6 +23,10 @@ namespace TechnicalFounders.Droid
             base.OnCreate(bundle);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
+
+            AnimationViewRenderer.Init();
+
+            CarouselViewRenderer.Init();
 
             var dbPath = Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments), 
                                       "database.sqlite");

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:carousel="clr-namespace:CarouselView.FormsPlugin.Abstractions;assembly=CarouselView.FormsPlugin.Abstractions"
+             xmlns:control="clr-namespace:Xamarin.Forms;assembly=Xamarin.Forms.CarouselView"
+             xmlns:lottie="clr-namespace:Lottie.Forms;assembly=Lottie.Forms"
+             x:Class="TechnicalFounders.Views.AnimationsPage">
+    
+    <ContentPage.Resources>
+        
+        <ResourceDictionary>
+            
+            <Style TargetType="Button">
+                <Setter Property="BackgroundColor" Value="#2196F3"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="FontSize" Value="22"/>
+                <Setter Property="CornerRadius" Value="10"/>
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="BorderWidth" Value="2.0"/>
+                <Setter Property="BorderColor" Value="Black"/>
+                <Setter Property="Margin" Value="20,0,20,0"/>
+            </Style>
+            
+        </ResourceDictionary>
+        
+    </ContentPage.Resources>
+    
+    <ScrollView>
+    
+        <StackLayout Spacing="20" VerticalOptions="Center">
+            
+            <Button Text="Translation" Clicked="Handle_Translation"/>
+            
+            <Button Text="Scale" Clicked="Handle_Scaling"/>
+            
+            <Button Text="Rotation" Clicked="Handle_Rotation"/>
+            
+            <Button Text="Fade" Clicked="Handle_Fading"/>
+            
+            <Button Text="Combined" Clicked="Handle_Combined"/>
+            
+            <lottie:AnimationView x:Name="animationView"
+                                  Animation="newAnimation.json" 
+                                  Loop="true" 
+                                  AutoPlay="true"
+                                  HeightRequest="200" 
+                                  WidthRequest="250" />
+            
+                                  <!-- OnFinish="Handle_OnFinish"
+                                  PlaybackStartedCommand="{Binding PlayingCommand}"
+                                  PlaybackFinishedCommand="{Binding FinishedCommand}" 
+                                  ClickedCommand="{Binding ClickedCommand}" -->
+            
+            
+            <!--<carousel:CarouselView ItemsSource="{Binding Cards}"
+                                   ItemSelected="Handle_ItemSelected"
+                                    PositionSelected="Handle_PositionSelected">
+                <carousel:CarouselView.ItemTemplate>
+                    <DataTemplate>
+                        <ContentView>
+                            <StackLayout Margin="100,20,100,35" BackgroundColor="Green"
+                                         x:Name="cardStack">
+                                <Image Source="{Binding ImageUrl}"/>
+                                <Label Text="{Binding Name}" HorizontalTextAlignment="Center"
+                                       TextColor="White" FontAttributes="Bold"/>
+                            </StackLayout>
+                        </ContentView>
+                    </DataTemplate>
+                </carousel:CarouselView.ItemTemplate>
+            </carousel:CarouselView>-->
+            
+            <!--<carousel:CarouselViewControl Orientation="Horizontal" 
+                                          InterPageSpacing="10" 
+                                          ItemsSource="{Binding Cards}" 
+                                          IsVisible="true"
+                                          IsSwipeEnabled="true"
+                                          Position="0"
+                                          ShowIndicators="true"
+                                          ShowArrows="false"
+                                          VerticalOptions="FillAndExpand"
+                                          HorizontalOptions="FillAndExpand"
+                                          HeightRequest="150"
+                                          Scrolled="CarouselScrolled"
+                                          AnimateTransition="true">
+                <carousel:CarouselViewControl.ItemTemplate>
+                    <DataTemplate>
+                        <ContentView>
+                            <StackLayout Margin="100,20,100,35" BackgroundColor="Green"
+                                         x:Name="cardStack">
+                                <Image Source="{Binding ImageUrl}"/>
+                                <Label Text="{Binding Name}" HorizontalTextAlignment="Center"
+                                       TextColor="White" FontAttributes="Bold"/>
+                            </StackLayout>
+                        </ContentView>
+                    </DataTemplate>
+                </carousel:CarouselViewControl.ItemTemplate>
+            </carousel:CarouselViewControl>-->
+            
+            <Button Text="Close" Clicked="OnClosePage" Margin="20,20,20,0"/>
+            
+        </StackLayout>
+        
+    </ScrollView>
+    
+</ContentPage>
